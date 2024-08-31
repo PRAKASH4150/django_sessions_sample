@@ -1,33 +1,57 @@
 from django.shortcuts import render, redirect
 
 def view_1(request):
-    tab_id = request.POST.get('tab_id')
+   # Retrieve or generate data to pass to the template
+    tab_id = request.GET.get('tab_id')
+    
     if tab_id:
-        request.session[f'data_{tab_id}_view1'] = {'step1': f'data from view 1{tab_id}'}
-    return render(request, 'view_1.html')
+        request.session['tab_id'] = tab_id
+
+    # Example data to pass to the template
+    data_context = {
+        'tab_id': tab_id,  # Passing the tab ID to the template
+        'message': 'Welcome to the First Page!',  # A welcome message
+        'user_name': 'John Doe',  # Dynamic user information
+        'items': ['Item1', 'Item2', 'Item3']  # A list of items
+    }
+
+    # Render the template with the data context
+    return render(request, 'view_1.html', data_context)
+
 
 def view_2(request):
-    tab_id = request.POST.get('tab_id')
+   # Retrieve or generate data to pass to the template
+    tab_id = request.GET.get('tab_id')
+    
     if tab_id:
-        data = request.session.get(f'data_{tab_id}_view1')
-        request.session[f'data_{tab_id}_view2'] = {'step2': f'data from view 2{tab_id}', 'prev_data': data}
-    return render(request, 'view_2.html')
+        request.session['tab_id'] = tab_id
+
+    # Example data to pass to the template
+    data_context = {
+        'tab_id': tab_id,  # Passing the tab ID to the template
+        'message': 'Welcome to the Second Page!',  # A welcome message
+        'user_name': 'John Doe',  # Dynamic user information
+        'items': ['Item1', 'Item2', 'Item3']  # A list of items
+    }
+
+    # Render the template with the data context
+    return render(request, 'view_2.html', data_context)
+
 
 def view_3(request):
-    tab_id = request.POST.get('tab_id')
+   # Retrieve or generate data to pass to the template
+    tab_id = request.GET.get('tab_id')
+    
     if tab_id:
-        # Extract data for this specific tab
-        data_view1 = request.session.get(f'data_{tab_id}_view1')
-        data_view2 = request.session.get(f'data_{tab_id}_view2')
-        # Pass the extracted data to the template context
-        context = {
-            'data_view1': data_view1,
-            'data_view2': data_view2,
-        }
-    else:
-        context = {
-            'data_view1': None,
-            'data_view2': None,
-        }
+        request.session['tab_id'] = tab_id
 
-    return render(request, 'view_3.html', context)
+    # Example data to pass to the template
+    data_context = {
+        'tab_id': tab_id,  # Passing the tab ID to the template
+        'message': 'Welcome to the Third Page!',  # A welcome message
+        'user_name': 'John Doe',  # Dynamic user information
+        'items': ['Item1', 'Item2', 'Item3']  # A list of items
+    }
+
+    # Render the template with the data context
+    return render(request, 'view_3.html', data_context)

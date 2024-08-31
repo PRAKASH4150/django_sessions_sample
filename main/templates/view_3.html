@@ -3,10 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>View 3</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Get the 'tab_id' parameter from the URL
+            let tabId = urlParams.get('tab_id');
+            
+            // Check the 'tab_id' in sessionStorage
+            const storedTabId = sessionStorage.getItem('tab-id');
+        
+            if (!tabId || tabId !== storedTabId) {
+                // A new tab is opened or a new ID is needed
+                tabId = Math.random().toString(36).substr(2, 9); // Generate a new unique ID
+        
+                // Set the 'tab_id' parameter in the URL
+                urlParams.set('tab_id', tabId);
+        
+                // Update sessionStorage with the new tab ID
+                sessionStorage.setItem('tab-id', tabId);
+        
+                // Reload the page with the new URL parameter
+                window.location.search = urlParams.toString();
+            } else {
+                // Update sessionStorage in case it's missing
+                sessionStorage.setItem('tab-id', tabId);
+            }
+        });
+        </script>
 </head>
 <body>
-    <h1>View 3</h1>
-    <p>Data from View 1: {{data_view1}}</p>
-    <p>Data from View 2: {{data_view2}}</p>
+    <h1>{{ message }}</h1>
+    <p>User: {{ user_name }}</p>
+    <p>Tab ID: {{ tab_id }}</p>
+    
+    <h2>Items List:</h2>
+    <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

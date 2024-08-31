@@ -4,57 +4,46 @@
     <meta charset="UTF-8">
     <title>View 1</title>
     <script>
-        // Function to generate or retrieve a unique TabId for the current tab
-        function getTabId() {
-            // Check if a TabId already exists in session storage
-            let tabId = sessionStorage.getItem('tabId');
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
             
-            if (!tabId) {
-                // Generate a new TabId if it doesn't exist
-                tabId = 'tab_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('tabId', tabId);
+            // Get the 'tab_id' parameter from the URL
+            let tabId = urlParams.get('tab_id');
+            
+            // Check the 'tab_id' in sessionStorage
+            const storedTabId = sessionStorage.getItem('tab-id');
+        
+            if (!tabId || tabId !== storedTabId) {
+                // A new tab is opened or a new ID is needed
+                tabId = Math.random().toString(36).substr(2, 9); // Generate a new unique ID
+        
+                // Set the 'tab_id' parameter in the URL
+                urlParams.set('tab_id', tabId);
+        
+                // Update sessionStorage with the new tab ID
+                sessionStorage.setItem('tab-id', tabId);
+        
+                // Reload the page with the new URL parameter
+                window.location.search = urlParams.toString();
+            } else {
+                // Update sessionStorage in case it's missing
+                sessionStorage.setItem('tab-id', tabId);
             }
-            
-            return tabId;
-        }
-    
-        // Function to add TabId to the form
-        function addTabIdToForm1() {
-            const form = document.getElementById("form-1"); // Select the form element
-            const input = document.createElement('input'); // Create a new hidden input element
-            input.type = 'hidden'; // Set input type to hidden
-            input.name = 'tab_id'; // Set the name attribute
-            input.value = getTabId(); // Set the value attribute to the TabId
-            form.appendChild(input); // Append the hidden input to the form
-             // Add TabId to the form on page load
-            document.addEventListener('DOMContentLoaded', addTabIdToForm1);
-        }
-
-            // Function to add TabId to the form
-            function addTabIdToForm2() {
-            const form = document.getElementById("form-2"); // Select the form element
-            const input = document.createElement('input'); // Create a new hidden input element
-            input.type = 'hidden'; // Set input type to hidden
-            input.name = 'tab_id'; // Set the name attribute
-            input.value = getTabId(); // Set the value attribute to the TabId
-            form.appendChild(input); // Append the hidden input to the form
-            document.addEventListener('DOMContentLoaded', addTabIdToForm2);
-        }
-
-    
-       
-    </script>
+        });
+        </script>
     
 </head>
 <body>
-    <h1>View 1</h1>
-    <form id="form-1" method="post" action="{% url 'view_1' %}" onsubmit="addTabIdToForm1(this);">
-        {% csrf_token %}
-        <button type="submit">Generate Id fro tab-1</button>
-    </form>
-    <form id="form-2" method="post" action="{% url 'view_2' %}" onsubmit="addTabIdToForm2(this);">
-        {% csrf_token %}
-        <button type="submit">Go to View 2</button>
-    </form>
+    <h1>{{ message }}</h1>
+    <p>User: {{ user_name }}</p>
+    <p>Tab ID: {{ tab_id }}</p>
+    
+    <h2>Items List:</h2>
+    <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>    
 </body>
 </html>
